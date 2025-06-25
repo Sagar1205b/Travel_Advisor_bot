@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WanderMate - Your AI Travel Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style th:inline="css">
+        :root {
+            --primary: #4A6FA5;  /* Deep blue */
+            --secondary: #6B8C42;  /* Earth green */
+            --accent: #FF7E5F;   /* Coral */
+            --light: #F8F5F2;    /* Cream */
+            --dark: #2D3747;    /* Navy */
+            --highlight: #FFD166; /* Sunny yellow */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-right: 0.5rem;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links a {
+            margin-left: 2rem;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #e06d50;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 126, 95, 0.3);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .hero {
+            padding: 8rem 5% 4rem;
+            display: flex;
+            align-items: center;
+            min-height: 90vh;
+            background: linear-gradient(rgba(248, 245, 242, 0.9), rgba(248, 245, 242, 0.9)),
+                        url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-content {
+            flex: 1;
+            padding-right: 2rem;
+        }
+
+        .hero-content h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-content h2 span {
+            color: var(--accent);
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: var(--dark);
+            max-width: 600px;
+        }
+
+        .hero-image {
+            flex: 1;
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transition: transform 0.5s;
+        }
+
+        .hero-image:hover img {
+            transform: scale(1.02);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .features {
+            padding: 5rem 5%;
+            background-color: white;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h3 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            color: #636e72;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background-color: var(--light);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--accent);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .how-it-works {
+            padding: 5rem 5%;
+            background-color: var(--light);
+            background-image: url('https://images.unsplash.com/photo-1483729558449-99ef09a8c325?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: white;
+            position: relative;
+        }
+
+        .how-it-works::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(45, 55, 71, 0.85);
+        }
+
+        .how-it-works .section-title,
+        .how-it-works .steps {
+            position: relative;
+            z-index: 1;
+        }
+
+        .how-it-works .section-title h3,
+        .how-it-works .section-title p {
+            color: white;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+            padding: 0 1.5rem;
+            position: relative;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1.5rem;
+        }
+
+        .step h4 {
+            color: var(--highlight);
+            margin-bottom: 1rem;
+        }
+
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 25px;
+            right: -50px;
+            width: 100px;
+            height: 2px;
+            background-color: var(--highlight);
+        }
+
+        .testimonials {
+            padding: 5rem 5%;
+            background-color: white;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background-color: var(--light);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 5rem;
+            color: rgba(74, 111, 165, 0.1);
+            font-family: serif;
+            line-height: 1;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .author-info h5 {
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .author-info p {
+            font-size: 0.8rem;
+            color: #636e72;
+        }
+
+        .cta-section {
+            padding: 5rem 5%;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+
+        .cta-section h3 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-section .btn {
+            background-color: white;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .cta-section .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: white;
+            margin: 0 1rem;
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+            color: var(--highlight);
+        }
+
+        .social-icons {
+            margin-bottom: 2rem;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 0.5rem;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .social-icons a:hover {
+            opacity: 1;
+            color: var(--highlight);
+        }
+
+        .copyright {
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+
+        .travel-highlights {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 3rem 0;
+        }
+
+        .highlight-item {
+            text-align: center;
+            margin: 1rem;
+        }
+
+        .highlight-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-text {
+            font-size: 1rem;
+            color: var(--dark);
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                padding-top: 6rem;
+                text-align: center;
+            }
+
+            .hero-content {
+                padding-right: 0;
+                margin-bottom: 3rem;
+            }
+
+            .hero-content h2 {
+                font-size: 2.5rem;
+            }
+
+            .cta-buttons {
+                justify-content: center;
+            }
+
+            .step:not(:last-child)::after {
+                display: none;
+            }
+
+            .step {
+                margin-bottom: 2rem;
+            }
+
+            .nav-links {
+                display: none; /* For mobile, consider adding a hamburger menu */
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar">
+    <div class="logo">
+        <i class="fas fa-plane"></i>
+        <h1>WanderMate</h1>
+    </div>
+    <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#features">Features</a>
+        <a href="#how-it">How It Works</a>
+        <a th:href="@{/travel/chat}" class="btn btn-primary">Chat Now</a>
+        <span th:if="${username!=null}">
+                            <a th:href="@{/travel/logout}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 hover:text-white">Logout</a>
+                        </span>
+        <span th:if="${username==null}">
+                            <a th:href="@{/travel/login}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 hover:text-white">Login</a>
+                            <a th:href="@{/travel/register}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 hover:text-white">Sign Up</a>
+                        </span>
+
+    </div>
+</nav>
+
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h2>Your Personal <span>Travel Assistant</span></h2>
+        <p>WanderMate is your AI-powered travel companion, helping you plan perfect trips, find hidden gems, and navigate foreign places with confidence.</p>
+        <div class="cta-buttons">
+            <button class="btn btn-primary" onclick="location.href='#chat'">Start Chatting</button>
+            <button class="btn btn-outline" onclick="location.href='#features'">Learn More</button>
+        </div>
+
+        <div class="travel-highlights">
+            <div class="highlight-item">
+                <div class="highlight-number">10K+</div>
+                <div class="highlight-text">Destinations</div>
+            </div>
+            <div class="highlight-item">
+                <div class="highlight-number">24/7</div>
+                <div class="highlight-text">Support</div>
+            </div>
+
+        </div>
+    </div>
+    <div class="hero-image">
+        <img src="https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Travel Chatbot Demo">
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features" id="features">
+    <div class="section-title">
+        <h3>Why Choose WanderMate</h3>
+        <p>Discover how our AI travel assistant can make your journeys unforgettable</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-route"></i>
+            </div>
+            <h4>Personalized Itineraries</h4>
+            <p>Get custom travel plans tailored to your interests, budget, and travel style.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-map-marked-alt"></i>
+            </div>
+            <h4>Local Insights</h4>
+            <p>Discover hidden gems and local favorites that aren't in guidebooks.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-concierge-bell"></i>
+            </div>
+            <h4>Booking Assistance</h4>
+            <p>We can help find and book flights, hotels, and activities at the best prices.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-utensils"></i>
+            </div>
+            <h4>Food Recommendations</h4>
+            <p>Get personalized dining suggestions based on your dietary preferences.</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works" id="how-it">
+    <div class="section-title">
+        <h3>How WanderMate Works</h3>
+        <p>Getting travel help has never been easier</p>
+    </div>
+    <div class="steps">
+        <div class="step">
+            <div class="step-number">1</div>
+            <h4>Start Chatting</h4>
+            <p>Begin a conversation with WanderMate through our app or website interface.</p>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <h4>Share Your Needs</h4>
+            <p>Tell us about your travel plans, preferences, and any specific requirements.</p>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <h4>Get Expert Advice</h4>
+            <p>Receive personalized recommendations, bookings, and real-time assistance.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- CTA Section -->
+<section class="cta-section" id="chat">
+    <h3>Ready for Smarter Travel?</h3>
+    <p>Join thousands of travelers who are exploring the world with confidence using WanderMate.</p>
+    <button class="btn" onclick="location.href='http://127.0.0.1:7860/'">Start Your Journey</button>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-links">
+        <a href="#">About Us</a>
+        <a href="#">Features</a>
+        <a href="#">How It Works</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+    </div>
+    <div class="social-icons">
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+        <a href="#"><i class="fab fa-pinterest"></i></a>
+    </div>
+    <div class="copyright">
+        &copy; <span th:text="${#temporals.year(#temporals.createToday())}">2023</span> WanderMate. All rights reserved.
+    </div>
+</footer>
+</body>
+</html>

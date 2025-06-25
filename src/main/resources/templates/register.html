@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Travel Voyage</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .glass-card {
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .floating-icon {
+            animation: float 15s linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.2; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .input-highlight:focus {
+            box-shadow: 0 0 0 2px rgba(74, 85, 104, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 overflow-hidden">
+<!-- Floating travel icons -->
+<div id="floating-icons" class="fixed inset-0 pointer-events-none"></div>
+
+<!-- Registration card -->
+<div class="glass-card rounded-2xl p-8 max-w-md w-full relative overflow-hidden text-gray-800">
+    <!-- Decorative elements -->
+    <div class="absolute -top-20 -right-20 w-40 h-40 bg-gray-300 rounded-full opacity-10 blur-xl"></div>
+    <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-gray-400 rounded-full opacity-10 blur-xl"></div>
+
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold mb-2 text-white">
+            Begin Your Journey
+        </h1>
+        <p class="text-white/80">Create an account to unlock exclusive travel experiences</p>
+    </div>
+
+    <form th:action="@{/register}" method="post">
+        <div th:if="${error}" class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg" th:text="${error}"></div>
+        <div class="space-y-4">
+            <!-- Username -->
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
+                    <i class="fas fa-user"></i>
+                </div>
+                <input type="text" id="username" name="username" class="w-full pl-10 pr-4 py-3 bg-white/70 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400 input-highlight placeholder-gray-500" placeholder="Username" required>
+            </div>
+
+            <!-- Email -->
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <input type="email" id="email" name="email" class="w-full pl-10 pr-4 py-3 bg-white/70 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400 input-highlight placeholder-gray-500" placeholder="Email" required>
+            </div>
+
+            <!-- Password -->
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <input type="password" id="password" name="password" class="w-full pl-10 pr-4 py-3 bg-white/70 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400 input-highlight placeholder-gray-500" placeholder="Password" required>
+            </div>
+
+            <!-- Terms checkbox -->
+            <div class="flex items-center">
+                <input type="checkbox" id="terms" class="w-4 h-4 bg-white/70 border-gray-300 rounded focus:ring-gray-400">
+                <label for="terms" class="ml-2 text-sm text-white/80">
+                    I agree to the <a href="#" class="text-white underline">Terms & Conditions</a>
+                </label>
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit" class="w-full py-3 px-4 bg-white text-gray-800 rounded-lg font-medium hover:bg-gray-100 transition-all duration-300 flex items-center justify-center space-x-2">
+                <i class="fas fa-paper-plane"></i>
+                <span>Register Now</span>
+            </button>
+        </div>
+    </form>
+
+    <div class="text-center mt-6 text-white/80">
+        Already have an account? <a th:href="@{/login}" class="text-white font-medium hover:underline">Sign In</a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('floating-icons');
+        const icons = ['fa-plane', 'fa-passport', 'fa-globe', 'fa-suitcase', 'fa-map', 'fa-umbrella-beach', 'fa-mountain', 'fa-hotel'];
+
+        // Create 20 floating icons
+        for (let i = 0; i < 20; i++) {
+            const icon = document.createElement('i');
+            icon.className = `fas ${icons[Math.floor(Math.random() * icons.length)]} floating-icon text-white/30`;
+
+            // Random positioning and animation
+            icon.style.left = `${Math.random() * 100}%`;
+            icon.style.top = `${Math.random() * 100}%`;
+            icon.style.fontSize = `${Math.random() * 20 + 10}px`;
+            icon.style.animationDelay = `${Math.random() * 15}s`;
+            icon.style.animationDuration = `${Math.random() * 20 + 10}s`;
+
+            container.appendChild(icon);
+        }
+    });
+</script>
+</body>
+</html>

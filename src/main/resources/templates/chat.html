@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Travel Chatbot</title>
+</head>
+<body>
+<h2>Welcome to Travel Chatbot</h2>
+
+<form th:action="@{/travel/chat/bot}" method="post">
+    <div>
+        <label for="message">Message:</label>
+        <input type="text" id="message" name="message" placeholder="Ask your travel question..." required/>
+    </div>
+
+    <div>
+        <label for="destinationType">Destination Type:</label>
+        <select name="destinationType" id="destinationType">
+            <option value="beach">Beach</option>
+            <option value="mountain">Mountain</option>
+            <option value="city">City</option>
+            <option value="countryside">Countryside</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="region">Region:</label>
+        <select name="region" id="region">
+            <option value="europe">Europe</option>
+            <option value="asia">Asia</option>
+            <option value="america">America</option>
+            <option value="africa">Africa</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="preference">Travel Preference:</label>
+        <select name="preference" id="preference">
+            <option value="adventure">Adventure</option>
+            <option value="relaxation">Relaxation</option>
+            <option value="culture">Culture</option>
+            <option value="nature">Nature</option>
+        </select>
+    </div>
+
+    <div>
+        <button type="submit">Send</button>
+    </div>
+</form>
+
+<div>
+    <h3>Chat History</h3>
+    <div th:each="chat : ${chatMessages}">
+        <p><b>You:</b> <span th:text="${chat.userMessage}"></span></p>
+        <p><b>Bot:</b> <span th:text="${chat.botResponse}"></span></p>
+        <hr/>
+    </div>
+</div>
+
+<a th:href="@{/travel/logout}">Logout</a>
+</body>
+</html>
